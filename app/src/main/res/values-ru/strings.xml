@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Telegram WS Proxy</string>
+    <string name="app_name">TG WS Proxy</string>
     <string name="status_connecting">Подключение</string>
     <string name="status_connected">Подключено</string>
     <string name="status_disconnected">Отключено</string>
@@ -55,11 +55,11 @@
     <string name="update_already_latest">У вас уже последняя версия: %1$s</string>
     <string name="about_project">О проекте</string>
     <string name="android_author">Автор Android-версии</string>
-    <string name="android_author_subtitle">GitHub профиль amurcanov</string>
+    <string name="android_author_subtitle">GitHub-профиль Lazarev2012</string>
     <string name="android_fork_repo">Репозиторий Android-форка</string>
     <string name="android_fork_repo_subtitle">Исходники и релизы этого приложения</string>
     <string name="original_tg_ws_proxy">Оригинальный tg-ws-proxy</string>
-    <string name="original_tg_ws_proxy_subtitle">Исходная идея и upstream от Flowseal</string>
+    <string name="original_tg_ws_proxy_subtitle">Upstream Flowseal; Android-исходники amurcanov</string>
     <string name="useful_material">Полезный материал</string>
     <string name="useful_material_subtitle">Заметки по работе прокси от IMDelewer</string>
     <string name="update_postponed_24h">Обновление отложено на 24 часа.</string>

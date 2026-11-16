@@ -99,9 +99,9 @@ import kotlin.math.min
 import kotlin.math.sin
 import kotlinx.coroutines.launch
 
-private const val AndroidForkRepoUrl = "https://github.com/amurcanov/tg-ws-proxy-android"
-private const val AndroidForkIssuesUrl = "https://github.com/amurcanov/tg-ws-proxy-android/issues"
-private const val DeveloperProfileUrl = "https://github.com/amurcanov"
+private const val AndroidForkRepoUrl = "https://github.com/Lazarev2012/tg-ws-proxy-android"
+private const val AndroidForkIssuesUrl = "https://github.com/Lazarev2012/tg-ws-proxy-android/issues"
+private const val DeveloperProfileUrl = "https://github.com/Lazarev2012"
 private const val OriginalProjectUrl = "https://github.com/Flowseal/tg-ws-proxy"
 private const val ProxyReferenceUrl = "https://github.com/Flowseal/tg-ws-proxy/issues/389"
 private const val AndroidAppDonateUrl = ""
@@ -132,7 +132,6 @@ fun InfoTab(settingsStore: SettingsStore) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var showHelpDialog by remember { mutableStateOf(false) }
-    var showDonateDialog by remember { mutableStateOf(false) }
     var actionsExpanded by rememberSaveable { mutableStateOf(true) }
     var projectExpanded by rememberSaveable { mutableStateOf(true) }
     var isCheckingUpdates by remember { mutableStateOf(false) }
@@ -204,7 +203,7 @@ fun InfoTab(settingsStore: SettingsStore) {
             )
         }
 
-            InfoHeroCard(onSupportClick = { showDonateDialog = true })
+            InfoHeroCard()
 
             ExpandableSectionCard(
             title = stringResource(R.string.actions),
@@ -399,9 +398,6 @@ fun InfoTab(settingsStore: SettingsStore) {
 
     }
 
-    if (showDonateDialog) {
-        DonateDialog(onDismiss = { showDonateDialog = false })
-    }
 
     pendingManualRelease?.let { release ->
         AppUpdateDialog(
@@ -527,7 +523,7 @@ fun InfoTab(settingsStore: SettingsStore) {
 }
 
 @Composable
-private fun InfoHeroCard(onSupportClick: () -> Unit) {
+private fun InfoHeroCard() {
     val colors = MaterialTheme.colorScheme
     val isDark = colors.background.luminance() < 0.22f
     val heroBrush = remember(colors.primaryContainer, colors.secondaryContainer, colors.surfaceVariant) {
@@ -588,7 +584,7 @@ private fun InfoHeroCard(onSupportClick: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     HeroMetaPill(
-                        text = "Amurcanov Fork",
+                        text = "Lazarev Alex",
                         containerColor = glassColor,
                         borderColor = glassBorder,
                         modifier = Modifier.weight(1f)
@@ -619,29 +615,6 @@ private fun InfoHeroCard(onSupportClick: () -> Unit) {
                     )
                 }
 
-                Button(
-                    onClick = onSupportClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(54.dp),
-                    shape = RoundedCornerShape(22.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = supportAccent,
-                        contentColor = Color.White
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = null,
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(
-                        text = stringResource(R.string.support_development),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp
-                    )
-                }
             }
         }
     }

@@ -1,12 +1,12 @@
 <div align="center">
   
-  # Telegram WS Proxy Android
+  # TG WS Proxy
 <br>
   <img src="https://img.shields.io/badge/Android-SDK_24--36-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android SDK">
   <img src="https://img.shields.io/badge/Rust-1.70+-000000?style=for-the-badge&logo=rust&logoColor=white" alt="Rust Version">
   <img src="https://img.shields.io/badge/Kotlin-Native-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin">
-  <a href="https://github.com/amurcanov/tg-ws-proxy-android/stargazers">
-    <img src="https://img.shields.io/github/stars/amurcanov/tg-ws-proxy-android?style=for-the-badge&logo=github&color=ffca28&labelColor=24292e" alt="Stars">
+  <a href="https://github.com/Lazarev2012/tg-ws-proxy-android/stargazers">
+    <img src="https://img.shields.io/github/stars/Lazarev2012/tg-ws-proxy-android?style=for-the-badge&logo=github&color=ffca28&labelColor=24292e" alt="Stars">
   </a>
 </div>
 <br>
@@ -42,9 +42,9 @@ Telegram Android → Локальный MTProto (по умолчанию 127.0.0
 
 ## Быстрый старт
 
-1. Скачайте актуальный `APK` со **[страницы релизов](https://github.com/amurcanov/tg-ws-proxy-android/releases)**.
+1. Скачайте актуальный `APK` со **[страницы релизов](https://github.com/Lazarev2012/tg-ws-proxy-android/releases)**.
 2. Установите приложение на ваш Android-смартфон.
-3. Откройте **TG WS Proxy Android**.
+3. Откройте **TG WS Proxy**.
 4. Ознакомьтесь со справкой внутри приложения.
 5. Нажмите **«Запустить прокси»** — появится уведомление о работе в фоновом режиме.
 6. Нажмите **«Применить в Telegram»** — откроется Telegram-клиент, где останется только подтвердить подключение.
@@ -79,4 +79,4 @@ Telegram Android → Локальный MTProto (по умолчанию 127.0.0
 
 ## Лицензия
 
-Этот форк распространяется под лицензией **GPLv3**. Оригинальный код `tg-ws-proxy` от [Flowseal](https://github.com/Flowseal) доступен под лицензией **MIT**.
+Проект распространяется под лицензией **GPLv3**. Использованы наработки [Flowseal/tg-ws-proxy](https://github.com/Flowseal/tg-ws-proxy) и Android-проекта [amurcanov/tg-ws-proxy-android](https://github.com/amurcanov/tg-ws-proxy-android). Автор текущей Android-сборки: **Lazarev Alex**.

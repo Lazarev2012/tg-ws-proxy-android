@@ -2,10 +2,12 @@ use crate::config::{log_debug, log_warn, STATS};
 use hmac::{Hmac, Mac};
 use rand::RngCore;
 use sha2::Sha256;
+use std::collections::{HashMap, VecDeque};
 use std::future::Future;
 use std::pin::Pin;
+use std::sync::Arc;
 use std::sync::atomic::Ordering;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 use tokio::io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt, ReadHalf, WriteHalf};
 use tokio::net::TcpStream;
 
@@ -19,6 +21,8 @@ const SESSION_ID_OFFSET: usize = 44;
 const SESSION_ID_LEN: usize = 32;
 
 const TIMESTAMP_TOLERANCE: i64 = 120;
+const REPLAY_WINDOW: Duration = Duration::from_secs(2 * TIMESTAMP_TOLERANCE as u64 + 1);
+const REPLAY_CACHE_SIZE: usize = 65_536;
 const TLS_APPDATA_MAX: usize = 16384;
 
 const READ_HANDSHAKE_TIMEOUT: Duration = Duration::from_secs(10);
@@ -32,6 +36,41 @@ const SH_SESSID_OFF: usize = 44;
 const SH_PUBKEY_OFF: usize = 89;
 
 type HmacSha256 = Hmac<Sha256>;
+
+static REPLAY_CACHE: once_cell::sync::Lazy<parking_lot::Mutex<(HashMap<[u8; 32], Instant>, VecDeque<([u8; 32], Instant)>)>> =
+    once_cell::sync::Lazy::new(|| parking_lot::Mutex::new((HashMap::new(), VecDeque::new())));
+
+fn first_seen_client_random(client_random: [u8; 32]) -> bool {
+    let now = Instant::now();
+    let expires_at = now + REPLAY_WINDOW;
+    let mut cache = REPLAY_CACHE.lock();
+
+    while let Some((key, expiry)) = cache.1.front().copied() {
+        if expiry > now {
+            break;
+        }
+        cache.1.pop_front();
+        if cache.0.get(&key) == Some(&expiry) {
+            cache.0.remove(&key);
+        }
+    }
+
+    if cache.0.contains_key(&client_random) {
+        return false;
+    }
+    while cache.0.len() >= REPLAY_CACHE_SIZE {
+        if let Some((key, expiry)) = cache.1.pop_front() {
+            if cache.0.get(&key) == Some(&expiry) {
+                cache.0.remove(&key);
+            }
+        } else {
+            break;
+        }
+    }
+    cache.0.insert(client_random, expires_at);
+    cache.1.push_back((client_random, expires_at));
+    true
+}
 
 pub struct FakeTlsStream {
     pub read: Box<dyn AsyncRead + Send + Unpin>,
@@ -356,7 +395,7 @@ pub async fn server_handshake(
     client_hello.extend_from_slice(&body);
 
     match verify_client_hello(&client_hello, secret) {
-        Some((client_random, session_id, ts)) => {
+        Some((client_random, session_id, ts)) if first_seen_client_random(client_random) => {
             log_debug(&format!("[{}] Fake TLS handshake ok (ts={})", label, ts));
             let server_hello = build_server_hello(secret, &client_random, &session_id);
             if conn.write_all(&server_hello).await.is_err() {
@@ -370,9 +409,9 @@ pub async fn server_handshake(
                 write: Box::new(TlsRecordWriter::new(w)),
             })
         }
-        None => {
+        Some(_) | None => {
             log_debug(&format!(
-                "[{}] Fake TLS verify failed (size={} rec={}) -> masking",
+                "[{}] Fake TLS verify failed or replayed (size={} rec={}) -> masking",
                 label,
                 client_hello.len(),
                 record_len
