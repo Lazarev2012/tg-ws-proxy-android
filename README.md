@@ -11,6 +11,10 @@
 </div>
 <br>
 
+**Русский** | [English](#english)
+
+## Русский
+
 **TG WS Proxy Android** — это локальный **MTProto-прокси** для Telegram на Android. Приложение помогает частично решать проблемы и в ряде сценариев ускоряет работу мессенджера, перенаправляя трафик через защищённые CloudFlare WebSocket-соединения или напрямую к датацентрам Telegram.
 
 > Разработка Android-версии продолжается Lazarev Alex, чтобы поддерживать приложение в рабочем состоянии и выпускать обновления. Это самостоятельное продолжение проекта на основе открытых наработок Flowseal и Android-версии amurcanov; авторство и ссылки на исходные проекты сохранены.
@@ -44,6 +48,9 @@ Telegram Android → Локальный MTProto (по умолчанию 127.0.0
 
 ## Быстрый старт
 
+> [!WARNING]
+> **У приложения новая подпись.** Если установлена версия **1.3.2 или старше** либо версия от amurcanov, сначала удалите её: Android не позволит установить новую версию поверх старой. После установки заново добавьте прокси в Telegram.
+
 1. Скачайте актуальный `APK` со **[страницы релизов](https://github.com/Lazarev2012/tg-ws-proxy-android/releases)**.
 2. Установите приложение на ваш Android-смартфон.
 3. Откройте **TG WS Proxy**.
@@ -64,6 +71,49 @@ Telegram Android → Локальный MTProto (по умолчанию 127.0.0
 
 ---
 
-## Лицензия
+## Лицензия и авторство
 
 Проект распространяется под лицензией **GPLv3**. Использованы наработки [Flowseal/tg-ws-proxy](https://github.com/Flowseal/tg-ws-proxy) и Android-проекта [amurcanov/tg-ws-proxy-android](https://github.com/amurcanov/tg-ws-proxy-android). Автор текущей Android-сборки: **Lazarev Alex**.
+
+---
+
+## English
+
+**TG WS Proxy** is a local **MTProto proxy** for Telegram on Android. It routes traffic through secure Cloudflare WebSocket connections or directly to Telegram data centers, which may help on networks where Telegram is unreliable.
+
+Android development is continued by **Lazarev Alex** to keep the app working and release updates. This is an independent continuation based on the published work of Flowseal and the Android project by amurcanov. Original project credits and links are retained.
+
+### Features
+
+- Material 3 interface built with Jetpack Compose.
+- Apply the proxy to compatible Telegram clients using `tg://proxy`.
+- Foreground service for background operation.
+- Live connection and proxy logs.
+- Dynamic colors on Android 12 and later, with built-in palettes on older versions.
+- In-app release update checks.
+
+### How it works
+
+```text
+Telegram Android -> Local MTProto (127.0.0.1:1443 by default) -> TG WS Proxy -> WSS via Cloudflare or direct -> Telegram DC
+```
+
+The app runs a native Rust MTProto proxy, reads the data center ID from the client traffic, then connects to the relevant Telegram data center over WebSocket. Connection pooling, keepalive, and fallback routes help handle changing network conditions.
+
+### Quick start
+
+> [!WARNING]
+> **This app is signed with a new key.** If version **1.3.2 or older**, or a version published by amurcanov, is installed, uninstall it first. Android will not install this build over an app signed with the previous key. After installing, add the proxy to Telegram again.
+
+1. Download an APK from the [GitHub Releases](https://github.com/Lazarev2012/tg-ws-proxy-android/releases) page.
+2. Install it on your Android device.
+3. Open **TG WS Proxy** and start the proxy.
+4. Select **Apply in Telegram** and confirm the proxy in your Telegram client.
+
+### Troubleshooting
+
+If the app crashes, fails to install, or cannot connect, use **Build report** in the app and include the report in a GitHub issue. Background operation can also be affected by Android power management and network conditions.
+
+### License and credits
+
+This project is distributed under **GPLv3**. It builds on work from [Flowseal/tg-ws-proxy](https://github.com/Flowseal/tg-ws-proxy) and the Android project [amurcanov/tg-ws-proxy-android](https://github.com/amurcanov/tg-ws-proxy-android). Current Android build maintained by **Lazarev Alex**.
