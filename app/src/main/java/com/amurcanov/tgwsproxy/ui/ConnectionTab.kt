@@ -441,6 +441,7 @@ private fun ModeChip(
 
 private val telegramPackages = listOf(
     "org.telegram.messenger",
+    "org.telegram.messenger.beta",
     "com.radolyn.ayugram",
     "com.exteragram.messenger",
     "org.telegram.plus",
