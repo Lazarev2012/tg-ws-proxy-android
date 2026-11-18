@@ -60,15 +60,9 @@ android {
         create("release") {
             val keyFile = localProperties.getProperty("KEYSTORE_FILE")
             if (keyFile != null) {
-                // Резолвим путь: если начинается с "..", берём от корня проекта
-                val resolvedFile = if (keyFile.startsWith("..")) {
-                    // ../release.keystore -> корень проекта / release.keystore
-                    file(rootDir.resolve(keyFile.substring(3)))
-                } else {
-                    file(keyFile)
-                }
+                val resolvedFile = rootProject.file(keyFile)
                 if (resolvedFile.exists()) {
-                    storeFile = resolvedFile
+                    storeFile = file("../${keyFile}")
                     storePassword = localProperties.getProperty("KEYSTORE_PASSWORD")
                     keyAlias = localProperties.getProperty("KEY_ALIAS")
                     keyPassword = localProperties.getProperty("KEY_PASSWORD")
@@ -91,11 +85,7 @@ android {
                 "proguard-rules.pro"
             )
             val keyFile = localProperties.getProperty("KEYSTORE_FILE")
-            val resolvedFile = if (keyFile != null && keyFile.startsWith("..")) {
-                file(rootDir.resolve(keyFile.substring(3)))
-            } else if (keyFile != null) {
-                file(keyFile)
-            } else null
+            val resolvedFile = keyFile?.let { rootProject.file(it) }
             
             if (resolvedFile != null && resolvedFile.exists()) {
                 signingConfig = signingConfigs.getByName("release")
